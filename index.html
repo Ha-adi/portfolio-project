@@ -1,13 +1,15 @@
+<!-- Simplified version: cleaner UI, minimal effects, Supabase unchanged -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Simple Portfolio</title>
+<title>Abdul Haadi — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
   body {
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Inter', sans-serif;
     background: #0f172a;
     color: #e2e8f0;
   }
@@ -35,17 +37,17 @@
     margin-bottom: 1rem;
   }
 
-  .hero {
-    text-align: center;
+  .hero h1 {
+    font-size: 2.5rem;
   }
 
   .btn {
     display: inline-block;
-    margin-top: 1rem;
     padding: 0.6rem 1.2rem;
     background: #6366f1;
     color: white;
     text-decoration: none;
+    margin-top: 1rem;
     border-radius: 6px;
   }
 
@@ -54,7 +56,7 @@
     gap: 1rem;
   }
 
-  .grid-2 {
+  .skills {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   }
 
@@ -67,35 +69,29 @@
   input, textarea {
     width: 100%;
     padding: 0.6rem;
-    margin-top: 0.5rem;
     margin-bottom: 1rem;
-    background: #020617;
-    border: 1px solid #1e293b;
-    color: white;
+    border-radius: 6px;
+    border: none;
   }
 
   button {
     padding: 0.6rem;
     background: #6366f1;
-    border: none;
     color: white;
+    border: none;
     border-radius: 6px;
-    cursor: pointer;
   }
 
-  footer {
-    text-align: center;
-    padding: 2rem;
-    background: #020617;
-    font-size: 0.9rem;
-    color: #94a3b8;
+  .messages {
+    margin-top: 2rem;
   }
+
 </style>
 </head>
 <body>
 
 <nav>
-  <strong>Abdul Haadi Siraj KV</strong>
+  <div>AH</div>
   <div>
     <a href="#about">About</a>
     <a href="#skills">Skills</a>
@@ -104,19 +100,19 @@
 </nav>
 
 <section class="hero">
-  <h1>Abdul Haadi Siraj KV</h1>
-  <p>Aspiring Web Developer & BCA Cloud Student</p>
+  <h1>Abdul Haadi</h1>
+  <p>Aspiring Web Developer & Cloud Computing Student</p>
   <a href="#contact" class="btn">Contact Me</a>
 </section>
 
 <section id="about">
   <h2>About</h2>
-  <p>I am a BCA student focused on cloud computing and web development. I enjoy solving problems and building simple solutions.</p>
+  <p>I am a BCA Cloud Computing student learning web development and programming.</p>
 </section>
 
 <section id="skills">
   <h2>Skills</h2>
-  <div class="grid grid-2">
+  <div class="grid skills">
     <div class="card">Python</div>
     <div class="card">C Programming</div>
     <div class="card">Problem Solving</div>
@@ -125,17 +121,68 @@
 
 <section id="contact">
   <h2>Contact</h2>
-  <form>
-    <input type="text" placeholder="Name" required>
-    <input type="email" placeholder="Email" required>
-    <textarea placeholder="Message" required></textarea>
-    <button type="submit">Send</button>
+
+  <form id="contactForm">
+    <input type="text" id="name" placeholder="Name" required>
+    <input type="email" id="email" placeholder="Email" required>
+    <textarea id="message" placeholder="Message" required></textarea>
+    <button type="submit" id="submitBtn">Send</button>
+    <div id="form-status"></div>
   </form>
+
+  <div class="messages" id="messages-list"></div>
 </section>
 
-<footer>
-  © 2025 Abdul Haadi 
-</footer>
+<script>
+  // SAME SUPABASE CODE (UNCHANGED)
+  const SUPABASE_URL = 'https://your-project.supabase.co';
+  const SUPABASE_ANON_KEY = 'your-anon-key-here';
+
+  async function supabaseFetch(path, options = {}) {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': options.prefer || 'return=minimal'
+      },
+      ...options
+    });
+    return res;
+  }
+
+  async function loadMessages() {
+    try {
+      const res = await supabaseFetch('messages?select=*&order=created_at.desc&limit=5');
+      const data = await res.json();
+      document.getElementById('messages-list').innerHTML = data.map(m => `
+        <div class="card">
+          <strong>${m.name}</strong><br>
+          ${m.email}<br>
+          ${m.message}
+        </div>
+      `).join('');
+    } catch {
+      document.getElementById('messages-list').innerHTML = 'No messages yet';
+    }
+  }
+
+  document.getElementById('contactForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const name = name.value;
+    const email = email.value;
+    const message = message.value;
+
+    await supabaseFetch('messages', {
+      method: 'POST',
+      body: JSON.stringify({ name, email, message })
+    });
+
+    loadMessages();
+  });
+
+  loadMessages();
+</script>
 
 </body>
 </html>
