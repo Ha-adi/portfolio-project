@@ -1,140 +1,765 @@
-<!-- Simplified version: cleaner UI, minimal effects, Supabase unchanged -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Abdul Haadi — Portfolio</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<title>Abdul Haadi Siraj KV — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  body {
-    margin: 0;
-    font-family: 'Inter', sans-serif;
-    background: #0f172a;
-    color: #e2e8f0;
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --border: #1e1e2e;
+    --accent: #7c6aff;
+    --accent2: #ff6a6a;
+    --accent3: #6affb8;
+    --text: #e8e8f0;
+    --muted: #6b6b80;
+    --card: #13131c;
   }
 
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.2s, height 0.2s, background 0.2s;
+    mix-blend-mode: screen;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(124,106,255,0.5);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: all 0.15s ease;
+  }
+  body:hover .cursor { opacity: 1; }
+
+  /* Noise overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9990;
+    opacity: 0.35;
+  }
+
+  /* Grid lines background */
+  .grid-bg {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(124,106,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124,106,255,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Nav */
   nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
     display: flex;
     justify-content: space-between;
-    padding: 1rem 2rem;
-    background: #020617;
+    align-items: center;
+    padding: 1.5rem 4rem;
+    background: rgba(10,10,15,0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
   }
-
-  nav a {
-    color: #94a3b8;
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: -0.02em;
+    color: var(--text);
     text-decoration: none;
-    margin-left: 1rem;
   }
+  .nav-logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
 
+  /* Sections */
   section {
-    padding: 4rem 2rem;
-    max-width: 900px;
-    margin: auto;
+    position: relative;
+    z-index: 1;
   }
 
-  h1, h2 {
-    margin-bottom: 1rem;
+  /* Hero */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8rem 4rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-glow {
+    position: absolute;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(124,106,255,0.15) 0%, transparent 70%);
+    top: -100px; right: -100px;
+    pointer-events: none;
+    animation: glow-pulse 4s ease-in-out infinite;
+  }
+  .hero-glow2 {
+    position: absolute;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(106,255,184,0.08) 0%, transparent 70%);
+    bottom: 0; left: 200px;
+    pointer-events: none;
+    animation: glow-pulse 6s ease-in-out infinite reverse;
+  }
+  @keyframes glow-pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.7; }
   }
 
-  .hero h1 {
-    font-size: 2.5rem;
+  .hero-tag {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent3);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    opacity: 0;
+    animation: fade-up 0.6s ease 0.2s forwards;
+  }
+  .hero-tag::before {
+    content: '';
+    width: 40px; height: 1px;
+    background: var(--accent3);
   }
 
-  .btn {
-    display: inline-block;
-    padding: 0.6rem 1.2rem;
-    background: #6366f1;
-    color: white;
-    text-decoration: none;
-    margin-top: 1rem;
-    border-radius: 6px;
+  .hero-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(3rem, 8vw, 7rem);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    color: var(--text);
+    opacity: 0;
+    animation: fade-up 0.6s ease 0.3s forwards;
+  }
+  .hero-name .highlight {
+    color: transparent;
+    -webkit-text-stroke: 1px var(--accent);
   }
 
-  .grid {
-    display: grid;
+  .hero-role {
+    font-size: 1rem;
+    color: var(--muted);
+    margin-top: 1.5rem;
+    max-width: 500px;
+    line-height: 1.8;
+    opacity: 0;
+    animation: fade-up 0.6s ease 0.5s forwards;
+  }
+  .hero-role strong { color: var(--accent2); font-weight: 400; }
+
+  .hero-cta {
+    display: flex;
     gap: 1rem;
+    margin-top: 3rem;
+    opacity: 0;
+    animation: fade-up 0.6s ease 0.7s forwards;
   }
-
-  .skills {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  }
-
-  .card {
-    background: #020617;
-    padding: 1rem;
-    border-radius: 8px;
-  }
-
-  input, textarea {
-    width: 100%;
-    padding: 0.6rem;
-    margin-bottom: 1rem;
-    border-radius: 6px;
+  .btn {
+    padding: 0.85rem 2rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
     border: none;
+    cursor: none;
+    transition: all 0.2s;
   }
-
-  button {
-    padding: 0.6rem;
-    background: #6366f1;
+  .btn-primary {
+    background: var(--accent);
     color: white;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+  .btn-primary:hover { background: #9d8fff; transform: translateY(-2px); }
+  .btn-outline {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+  .scroll-indicator {
+    position: absolute;
+    bottom: 2rem; left: 4rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    opacity: 0;
+    animation: fade-up 0.6s ease 1s forwards;
+  }
+  .scroll-line {
+    width: 1px; height: 50px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+    animation: scroll-line 1.5s ease-in-out infinite;
+  }
+  @keyframes scroll-line {
+    0% { transform: scaleY(0); transform-origin: top; }
+    50% { transform: scaleY(1); transform-origin: top; }
+    51% { transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; }
+  }
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* About section */
+  #about {
+    padding: 8rem 4rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+    border-top: 1px solid var(--border);
+  }
+  .section-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+    max-width: 60px;
+  }
+  .about-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 2.5rem;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+  .about-text {
+    color: var(--muted);
+    line-height: 2;
+    font-size: 0.85rem;
+  }
+  .stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transition: transform 0.3s;
+    transform-origin: left;
+  }
+  .stat-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .stat-card:hover::before { transform: scaleX(1); }
+  .stat-number {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 2.5rem;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .stat-label { font-size: 0.7rem; color: var(--muted); margin-top: 0.5rem; letter-spacing: 0.05em; }
+
+  /* Skills */
+  #skills {
+    padding: 8rem 4rem;
+    border-top: 1px solid var(--border);
+  }
+  .skills-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 4rem;
+  }
+  .skills-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 2.5rem;
+    letter-spacing: -0.03em;
+  }
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  .skill-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    cursor: none;
+    transition: all 0.3s;
+    group: true;
+  }
+  .skill-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(124,106,255,0.15);
+  }
+  .skill-number {
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-bottom: 1.5rem;
+  }
+  .skill-icon {
+    width: 48px; height: 48px;
+    background: rgba(124,106,255,0.1);
+    border: 1px solid rgba(124,106,255,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s;
+  }
+  .skill-card:hover .skill-icon {
+    background: rgba(124,106,255,0.2);
+    border-color: var(--accent);
+  }
+  .skill-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+  }
+  .skill-desc { font-size: 0.75rem; color: var(--muted); line-height: 1.8; }
+  .skill-bar-wrap {
+    margin-top: 1.5rem;
+    height: 2px;
+    background: var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .skill-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent3));
+    transform-origin: left;
+    animation: bar-grow 1s ease 0.5s both;
+  }
+  @keyframes bar-grow {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+
+  /* Contact / Supabase section */
+  #contact {
+    padding: 8rem 4rem;
+    border-top: 1px solid var(--border);
+  }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+    margin-top: 4rem;
+  }
+  .contact-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 2.5rem;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+  }
+  .contact-sub {
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 2;
+    margin-bottom: 2rem;
+  }
+
+  .form-group {
+    margin-bottom: 1.25rem;
+    position: relative;
+  }
+  .form-label {
+    display: block;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+  .form-input, .form-textarea {
+    width: 100%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.85rem;
+    padding: 0.85rem 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+    resize: none;
+  }
+  .form-input:focus, .form-textarea:focus { border-color: var(--accent); }
+  .form-textarea { height: 120px; }
+  .form-input::placeholder, .form-textarea::placeholder { color: var(--muted); }
+
+  .submit-btn {
+    width: 100%;
+    padding: 1rem;
+    background: var(--accent);
     border: none;
-    border-radius: 6px;
+    color: white;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: none;
+    clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+    transition: all 0.2s;
+    margin-top: 0.5rem;
+  }
+  .submit-btn:hover { background: #9d8fff; transform: translateY(-2px); }
+  .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  #form-status {
+    margin-top: 1rem;
+    font-size: 0.75rem;
+    padding: 0.75rem 1rem;
+    display: none;
+  }
+  #form-status.success {
+    display: block;
+    background: rgba(106,255,184,0.1);
+    border: 1px solid rgba(106,255,184,0.3);
+    color: var(--accent3);
+  }
+  #form-status.error {
+    display: block;
+    background: rgba(255,106,106,0.1);
+    border: 1px solid rgba(255,106,106,0.3);
+    color: var(--accent2);
   }
 
-  .messages {
-    margin-top: 2rem;
+  /* Messages display */
+  .messages-panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    height: 100%;
+  }
+  .messages-header {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .live-dot {
+    width: 6px; height: 6px;
+    background: var(--accent3);
+    border-radius: 50%;
+    animation: blink 1.5s ease-in-out infinite;
+  }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+
+  .message-item {
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border);
+    animation: fade-up 0.3s ease;
+  }
+  .message-item:last-child { border-bottom: none; }
+  .message-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.4rem;
+  }
+  .message-name { font-size: 0.8rem; color: var(--text); }
+  .message-time { font-size: 0.65rem; color: var(--muted); }
+  .message-email { font-size: 0.65rem; color: var(--accent); margin-bottom: 0.4rem; }
+  .message-body { font-size: 0.75rem; color: var(--muted); line-height: 1.7; }
+  .no-messages { font-size: 0.75rem; color: var(--muted); text-align: center; padding: 3rem 0; }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+  }
+  .footer-text { font-size: 0.7rem; color: var(--muted); }
+  .footer-accent { color: var(--accent); }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    nav { padding: 1.2rem 2rem; }
+    #hero { padding: 7rem 2rem 4rem; }
+    #about, #skills, #contact { padding: 5rem 2rem; }
+    #about { grid-template-columns: 1fr; gap: 3rem; }
+    .skills-grid { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; }
+    footer { padding: 2rem; flex-direction: column; gap: 1rem; text-align: center; }
+    .nav-links { display: none; }
   }
 
+  /* Loading spinner */
+  .spinner {
+    display: inline-block;
+    width: 12px; height: 12px;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    vertical-align: middle;
+    margin-right: 0.5rem;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
 
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="grid-bg"></div>
+
+<!-- Nav -->
 <nav>
-  <div>AH</div>
-  <div>
-    <a href="#about">About</a>
-    <a href="#skills">Skills</a>
-    <a href="#contact">Contact</a>
-  </div>
+  <a href="#hero" class="nav-logo">AH<span>.</span>SK</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
 </nav>
 
-<section class="hero">
-  <h1>Abdul Haadi</h1>
-  <p>Aspiring Web Developer & Cloud Computing Student</p>
-  <a href="#contact" class="btn">Contact Me</a>
-</section>
+<!-- Hero -->
+<section id="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
 
-<section id="about">
-  <h2>About</h2>
-  <p>I am a BCA Cloud Computing student learning web development and programming.</p>
-</section>
+  <div class="hero-tag">BCA Cloud Computing · Siraj KV</div>
+  <h1 class="hero-name">
+    Abdul<br>
+    <span class="highlight">Haadi.</span>
+  </h1>
+  <p class="hero-role">
+    <strong>Aspiring Web Developer</strong> &amp; Cloud Computing student.<br>
+    Building logical solutions, one line at a time.
+  </p>
+  <div class="hero-cta">
+    <a href="#skills" class="btn btn-primary">View Skills</a>
+    <a href="#contact" class="btn btn-outline">Say Hello</a>
+  </div>
 
-<section id="skills">
-  <h2>Skills</h2>
-  <div class="grid skills">
-    <div class="card">Python</div>
-    <div class="card">C Programming</div>
-    <div class="card">Problem Solving</div>
+  <div class="scroll-indicator">
+    <div class="scroll-line"></div>
+    Scroll Down
   </div>
 </section>
 
-<section id="contact">
-  <h2>Contact</h2>
-
-  <form id="contactForm">
-    <input type="text" id="name" placeholder="Name" required>
-    <input type="email" id="email" placeholder="Email" required>
-    <textarea id="message" placeholder="Message" required></textarea>
-    <button type="submit" id="submitBtn">Send</button>
-    <div id="form-status"></div>
-  </form>
-
-  <div class="messages" id="messages-list"></div>
+<!-- About -->
+<section id="about">
+  <div>
+    <div class="section-label">About Me</div>
+    <h2 class="about-title">Student &amp; Developer in the Making</h2>
+    <p class="about-text">
+      I'm Abdul Haadi Siraj KV, a BCA student specializing in Cloud Computing. I'm on a journey to transform my passion for technology into real-world web development skills. With a strong foundation in problem solving and logical thinking, I approach every challenge with curiosity and persistence.
+    </p>
+  </div>
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-number">BCA</div>
+      <div class="stat-label">Degree Program</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">☁️</div>
+      <div class="stat-label">Cloud Computing Focus</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">3+</div>
+      <div class="stat-label">Core Skills</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">∞</div>
+      <div class="stat-label">Curiosity Level</div>
+    </div>
+  </div>
 </section>
 
+<!-- Skills -->
+<section id="skills">
+  <div class="skills-header">
+    <div>
+      <div class="section-label">Technical Arsenal</div>
+      <h2 class="skills-title">Skills &amp; Expertise</h2>
+    </div>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-card">
+      <div class="skill-number">01</div>
+      <div class="skill-icon">🐍</div>
+      <div class="skill-name">Python Programming</div>
+      <div class="skill-desc">Fundamental Python skills including variables, loops, functions, and basic scripting for automation and logic building.</div>
+      <div class="skill-bar-wrap"><div class="skill-bar" style="width:60%"></div></div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-number">02</div>
+      <div class="skill-icon">⚙️</div>
+      <div class="skill-name">C Programming</div>
+      <div class="skill-desc">Core understanding of C language — pointers, memory management, loops, and structured programming fundamentals.</div>
+      <div class="skill-bar-wrap"><div class="skill-bar" style="width:55%"></div></div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-number">03</div>
+      <div class="skill-icon">🧩</div>
+      <div class="skill-name">Problem Solving &amp; Logical Thinking</div>
+      <div class="skill-desc">Strong analytical mindset — breaking complex problems into manageable components and crafting efficient, logical solutions.</div>
+      <div class="skill-bar-wrap"><div class="skill-bar" style="width:75%"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section id="contact">
+  <div class="section-label">Get In Touch</div>
+  <div class="contact-grid">
+    <div>
+      <h2 class="contact-title">Let's Connect &amp; Build Something</h2>
+      <p class="contact-sub">Have a project idea, collaboration, or just want to say hi? Drop a message and it'll be saved directly to the database.</p>
+
+      <form id="contactForm">
+        <div class="form-group">
+          <label class="form-label" for="name">Your Name</label>
+          <input type="text" id="name" class="form-input" placeholder="John Doe" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="email">Email Address</label>
+          <input type="email" id="email" class="form-input" placeholder="john@example.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="message">Message</label>
+          <textarea id="message" class="form-textarea" placeholder="Hey Abdul, I wanted to reach out..." required></textarea>
+        </div>
+        <button type="submit" class="submit-btn" id="submitBtn">Send Message</button>
+        <div id="form-status"></div>
+      </form>
+    </div>
+
+    <div class="messages-panel">
+      <div class="messages-header">
+        <span>Live Messages</span>
+        <div class="live-dot"></div>
+      </div>
+      <div id="messages-list">
+        <div class="no-messages">No messages yet.<br>Be the first to say hello!</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <span class="footer-text">© 2025 <span class="footer-accent">Abdul Haadi Siraj KV</span></span>
+  <span class="footer-text">BCA Cloud Computing · Aspiring Web Developer</span>
+</footer>
+
 <script>
-  // SAME SUPABASE CODE (UNCHANGED)
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const cursorRing = document.getElementById('cursorRing');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+    setTimeout(() => {
+      cursorRing.style.left = e.clientX + 'px';
+      cursorRing.style.top = e.clientY + 'px';
+    }, 80);
+  });
+  document.querySelectorAll('a, button, .skill-card, .stat-card').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.width = '20px';
+      cursor.style.height = '20px';
+      cursor.style.background = '#9d8fff';
+      cursorRing.style.width = '50px';
+      cursorRing.style.height = '50px';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.width = '12px';
+      cursor.style.height = '12px';
+      cursor.style.background = 'var(--accent)';
+      cursorRing.style.width = '36px';
+      cursorRing.style.height = '36px';
+    });
+  });
+
+  // ─── Supabase Config ───────────────────────────────────────────────────────
+  // Replace these with your actual Supabase project URL and anon key
   const SUPABASE_URL = 'https://xipboskoiqsxrdclrnlt.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhpcGJvc2tvaXFzeHJkY2xybmx0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1MzQ0OTMsImV4cCI6MjA5MDExMDQ5M30.DWmtoWaiusvvFiPWI9HxAFrvKl3srIgmZuN38airlE0';
 
@@ -144,45 +769,96 @@
         'apikey': SUPABASE_ANON_KEY,
         'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
         'Content-Type': 'application/json',
-        'Prefer': options.prefer || 'return=minimal'
+        'Prefer': options.prefer || 'return=minimal',
+        ...options.headers
       },
       ...options
     });
     return res;
   }
 
+  // Load messages
   async function loadMessages() {
     try {
-      const res = await supabaseFetch('messages?select=*&order=created_at.desc&limit=5');
+      const res = await supabaseFetch('messages?select=*&order=created_at.desc&limit=5', {
+        headers: { 'Range': '0-4' }
+      });
+      if (!res.ok) throw new Error('Failed to load');
       const data = await res.json();
-      document.getElementById('messages-list').innerHTML = data.map(m => `
-        <div class="card">
-          <strong>${m.name}</strong><br>
-          ${m.email}<br>
-          ${m.message}
-        </div>
-      `).join('');
-    } catch {
-      document.getElementById('messages-list').innerHTML = 'No messages yet';
+      renderMessages(data);
+    } catch (e) {
+      // Supabase not configured yet — show demo state
+      renderMessages([]);
     }
   }
 
+  function renderMessages(messages) {
+    const list = document.getElementById('messages-list');
+    if (!messages.length) {
+      list.innerHTML = '<div class="no-messages">No messages yet.<br>Be the first to say hello!</div>';
+      return;
+    }
+    list.innerHTML = messages.map(m => `
+      <div class="message-item">
+        <div class="message-meta">
+          <span class="message-name">${escHtml(m.name)}</span>
+          <span class="message-time">${timeAgo(m.created_at)}</span>
+        </div>
+        <div class="message-email">${escHtml(m.email)}</div>
+        <div class="message-body">${escHtml(m.message)}</div>
+      </div>
+    `).join('');
+  }
+
+  // Submit form
   document.getElementById('contactForm').addEventListener('submit', async e => {
     e.preventDefault();
-    const name = name.value;
-    const email = email.value;
-    const message = message.value;
+    const btn = document.getElementById('submitBtn');
+    const status = document.getElementById('form-status');
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const message = document.getElementById('message').value.trim();
 
-    await supabaseFetch('messages', {
-      method: 'POST',
-      body: JSON.stringify({ name, email, message })
-    });
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Sending...';
+    status.className = '';
+    status.style.display = 'none';
 
-    loadMessages();
+    try {
+      const res = await supabaseFetch('messages', {
+        method: 'POST',
+        prefer: 'return=minimal',
+        body: JSON.stringify({ name, email, message })
+      });
+      if (!res.ok) throw new Error('Failed to send');
+      status.className = 'success';
+      status.textContent = '✓ Message sent! Thanks for reaching out.';
+      e.target.reset();
+      loadMessages();
+    } catch (err) {
+      status.className = 'error';
+      status.textContent = '⚠ Could not send — Supabase not configured yet. Please add your project URL & anon key.';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Send Message';
+    }
   });
 
-  loadMessages();
-</script>
+  function escHtml(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
 
+  function timeAgo(dateStr) {
+    const diff = (Date.now() - new Date(dateStr)) / 1000;
+    if (diff < 60) return 'just now';
+    if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+    if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+    return Math.floor(diff / 86400) + 'd ago';
+  }
+
+  // Init
+  loadMessages();
+  setInterval(loadMessages, 30000);
+</script>
 </body>
 </html>
