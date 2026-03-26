@@ -7,7 +7,7 @@ document.getElementById("form").addEventListener("submit", async function(e){
   e.preventDefault();
 
   const { error } = await client
-    .from("FEEDBACK")
+    .from("feedback")
     .insert([
       {
         NAME: document.getElementById("name").value,
