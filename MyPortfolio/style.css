@@ -1,102 +1,67 @@
 body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  background: linear-gradient(135deg, #0f172a, #020617);
-  color: #e2e8f0;
+font-family: Arial, sans-serif;
+margin: 0;
+background: linear-gradient(135deg, #0f172a, #020617);
+color: #e2e8f0;
 }
 
-/* HEADER */
 header {
-  background: transparent;
-  padding: 60px 20px;
-  text-align: center;
+padding: 60px 20px;
+text-align: center;
 }
 
 header h1 {
-  font-size: 2.5rem;
-  margin-bottom: 10px;
+font-size: 2.5rem;
 }
 
 header p {
-  color: #94a3b8;
+color: #94a3b8;
 }
 
-/* SECTIONS (Glass Card Style) */
 section {
-  max-width: 700px;
-  margin: 25px auto;
-  padding: 25px;
-  border-radius: 15px;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,255,255,0.08);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+max-width: 700px;
+margin: 25px auto;
+padding: 25px;
+border-radius: 15px;
+background: rgba(255, 255, 255, 0.05);
+backdrop-filter: blur(10px);
+border: 1px solid rgba(255,255,255,0.08);
 }
 
-/* HEADINGS */
 h2 {
-  margin-bottom: 15px;
-  color: #38bdf8;
-  border-left: 4px solid #0ea5e9;
-  padding-left: 10px;
+color: #38bdf8;
+border-left: 4px solid #0ea5e9;
+padding-left: 10px;
 }
 
-/* LIST */
 ul {
-  list-style: none;
-  padding: 0;
+list-style: none;
+padding: 0;
 }
 
 li {
-  background: rgba(255,255,255,0.06);
-  margin: 8px 0;
-  padding: 12px;
-  border-radius: 8px;
-  transition: 0.2s;
+background: rgba(255,255,255,0.06);
+margin: 8px 0;
+padding: 12px;
+border-radius: 8px;
 }
 
-li:hover {
-  background: rgba(56,189,248,0.15);
-  transform: translateX(5px);
-}
-
-/* FORM */
 input, textarea {
-  width: 100%;
-  padding: 12px;
-  margin: 8px 0;
-  border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.15);
-  background: rgba(255,255,255,0.05);
-  color: white;
-  outline: none;
-  transition: 0.2s;
+width: 100%;
+padding: 12px;
+margin: 8px 0;
+border-radius: 8px;
+border: 1px solid rgba(255,255,255,0.15);
+background: rgba(255,255,255,0.05);
+color: white;
 }
 
-input::placeholder, textarea::placeholder {
-  color: #94a3b8;
-}
-
-input:focus, textarea:focus {
-  border-color: #38bdf8;
-  box-shadow: 0 0 0 2px rgba(56,189,248,0.3);
-}
-
-/* BUTTON */
 button {
-  margin-top: 10px;
-  padding: 12px;
-  width: 100%;
-  background: linear-gradient(135deg, #0ea5e9, #38bdf8);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 20px rgba(56,189,248,0.4);
+padding: 12px;
+width: 100%;
+background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+color: white;
+border: none;
+border-radius: 8px;
+cursor: pointer;
 }
