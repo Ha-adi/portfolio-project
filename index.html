@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simple Portfolio</title>
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: #e2e8f0;
+  }
+
+  nav {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background: #020617;
+  }
+
+  nav a {
+    color: #94a3b8;
+    text-decoration: none;
+    margin-left: 1rem;
+  }
+
+  section {
+    padding: 4rem 2rem;
+    max-width: 900px;
+    margin: auto;
+  }
+
+  h1, h2 {
+    margin-bottom: 1rem;
+  }
+
+  .hero {
+    text-align: center;
+  }
+
+  .btn {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.6rem 1.2rem;
+    background: #6366f1;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+  }
+
+  .grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .grid-2 {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+
+  .card {
+    background: #020617;
+    padding: 1rem;
+    border-radius: 8px;
+  }
+
+  input, textarea {
+    width: 100%;
+    padding: 0.6rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    background: #020617;
+    border: 1px solid #1e293b;
+    color: white;
+  }
+
+  button {
+    padding: 0.6rem;
+    background: #6366f1;
+    border: none;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  footer {
+    text-align: center;
+    padding: 2rem;
+    background: #020617;
+    font-size: 0.9rem;
+    color: #94a3b8;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <strong>Abdul Haadi Siraj KV</strong>
+  <div>
+    <a href="#about">About</a>
+    <a href="#skills">Skills</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <h1>Abdul Haadi Siraj KV</h1>
+  <p>Aspiring Web Developer & BCA Cloud Student</p>
+  <a href="#contact" class="btn">Contact Me</a>
+</section>
+
+<section id="about">
+  <h2>About</h2>
+  <p>I am a BCA student focused on cloud computing and web development. I enjoy solving problems and building simple solutions.</p>
+</section>
+
+<section id="skills">
+  <h2>Skills</h2>
+  <div class="grid grid-2">
+    <div class="card">Python</div>
+    <div class="card">C Programming</div>
+    <div class="card">Problem Solving</div>
+  </div>
+</section>
+
+<section id="contact">
+  <h2>Contact</h2>
+  <form>
+    <input type="text" placeholder="Name" required>
+    <input type="email" placeholder="Email" required>
+    <textarea placeholder="Message" required></textarea>
+    <button type="submit">Send</button>
+  </form>
+</section>
+
+<footer>
+  © 2025 Abdul Haadi 
+</footer>
+
+</body>
+</html>
